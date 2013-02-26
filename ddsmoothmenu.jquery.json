@@ -1,0 +1,25 @@
+{
+  "name": "ddsmoothmenu",
+  "title": "Smooth Navigational Menu",
+  "description": "Smooth Navigation Menu is a multi level, CSS list based menu powered using jQuery that makes website navigation a smooth affair. And that's a good thing given the important role of this element in any site. The menu's contents can either be from direct markup on the page, or an external file and fetched via Ajax instead. And thanks to jQuery, a configurable, sleek \"slide plus fade in\" transition is applied during the unveiling of the sub menus. The menu supports both the horizontal and vertical (sidebar) orientation.",
+  "keywords": ["menu", "dropdown", "bar", "navigation"],
+  "version": "2.0.0",
+  "author": {
+    "name": "Dynamic Drive",
+    "email" : "ddrivehelp@gmail.com",
+		"url": "http://www.dynamicdrive.com"
+  },
+  "licenses": [
+    {
+      "type": "Freeware",
+      "url": "http://www.dynamicdrive.com/notice.htm"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=1.4"
+  },
+  "homepage": "http://www.dynamicdrive.com/dynamicindex1/ddsmoothmenu.htm",
+  "docs": "http://www.dynamicdrive.com/dynamicindex1/ddsmoothmenu.htm",
+  "demo": "http://www.dynamicdrive.com/dynamicindex1/ddsmoothmenu.htm",
+  "download": "http://www.dynamicdrive.com/dynamicindex1/ddsmoothmenu.htm"
+}
