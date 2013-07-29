@@ -18,7 +18,7 @@
 //** Jun 28th, 2012: Unofficial update adds optional hover images for down and right arrows in the format: filename_over.ext
 //** These must be present for whichever or both of the arrow(s) are used and will preload.
 
-//** Dec 23rd, 2012 Unofficial update to fixed configurable z-index, add method option to init "toggle" which activates on click or "hover" 
+//** Dec 23rd, 2012 Unofficial update to fixed configurable z-index, add method option to init "toggle" which activates on click or "hover"
 //** which activates on mouse over/out - defaults to "toggle" (click activation), with detection of touch devices to activate on click for them.
 //** Add option for when there are two or more menus using "toggle" activation, whether or not all previously opened menus collapse
 //** on new menu activation, or just those within that specific menu
@@ -31,7 +31,7 @@
 //** Feb 15th, 2013 Add 'ontouchstart' in window and 'ontouchstart' in document.documentElement to means tests for detecting touch browsers - thanks DD!
 
 //** Feb 20th, 2013 correct for IE 9+ sometimes adding a pixel to the offsetHeight of the top level trigger for horizontal menus
-//** Feb 23rd, 2013 move CSS3 shadow adjustment for IE 9+ to the script, add resize event for all browsers to reposition open toggle 
+//** Feb 23rd, 2013 move CSS3 shadow adjustment for IE 9+ to the script, add resize event for all browsers to reposition open toggle
 //** menus and shadows in window if they would have gone to a different position at the new window dimensions
 //** Feb 25th, 2013 (v2.0) All unofficial updates by John merged into official and now called v2.0. Changed "method" option's default value to "hover"
 
@@ -45,7 +45,7 @@ transition: {overtime:300, outtime:300}, //duration of slide in/ out animation, 
 shadow: true, //enable shadow? (offsets now set in ddsmoothmenu.css stylesheet)
 showhidedelay: {showdelay: 100, hidedelay: 200}, //set delay in milliseconds before sub menus appear and disappear, respectively
 zindexvalue: 1000, //set z-index value for menus
-closeonnonmenuclick: true, //when clicking outside of any "toggle" method menu, should all "toggle" menus close? 
+closeonnonmenuclick: true, //when clicking outside of any "toggle" method menu, should all "toggle" menus close?
 closeonmouseout: false, //when leaving a "toggle" menu, should all "toggle" menus close? Will not work on touchscreen
 
 /////////////////////// End Global Configuration Options ////////////////////////
@@ -331,6 +331,9 @@ init: function(setting){
 		stylestring.reverse();
 		jQuery('head').append(stylestring.join('\n'));
 	}
+	if (typeof setting.arrowimages=="object"){
+		ddsmoothmenu.arrowimages = setting.arrowimages;
+	}
 	if(setting.arrowswap){
 		right = ddsmoothmenu.arrowimages.right[1].replace(ddsmoothmenu.overarrowre, ddsmoothmenu.overarrowaddtofilename);
 		down = ddsmoothmenu.arrowimages.down[1].replace(ddsmoothmenu.overarrowre, ddsmoothmenu.overarrowaddtofilename);
@@ -401,10 +404,10 @@ if(parseFloat(jQuery.fn.jquery) > 1.8 && !!!jQuery.migrateWarnings){
 						// Figure out which function to execute
 						var lastToggle = ( jQuery._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
 						jQuery._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
-	
+
 						// Make sure that clicks stop
 						event.preventDefault();
-	
+
 						// and execute the function
 						return args[ lastToggle ].apply( this, arguments ) || false;
 					};
@@ -421,13 +424,13 @@ if(parseFloat(jQuery.fn.jquery) > 1.8 && !!!jQuery.migrateWarnings){
 	})();
 }
 
-/* TECHNICAL NOTE: To overcome an intermittent layout bug in IE 9+, the script will change margin top and left for the shadows to 
-   1px less than their computed values, and the first two values for the box-shadow property will be changed to 1px larger than 
-   computed, ex: -1px top and left margins and 6px 6px 5px #aaa box-shadow results in what appears to be a 5px box-shadow. 
-   Other browsers skip this step and it shouldn't affect you in most cases. In some rare cases it will result in 
-   slightly narrower (by 1px) box shadows for IE 9+ on one or more of the drop downs. Without this, sometimes 
-   the shadows could be 1px beyond their drop down resulting in a gap. This is the first of the two patches below. 
-   and also relates to the MS CSSOM which uses decimal fractions of pixels for layout while only reporting rounded values. 
+/* TECHNICAL NOTE: To overcome an intermittent layout bug in IE 9+, the script will change margin top and left for the shadows to
+   1px less than their computed values, and the first two values for the box-shadow property will be changed to 1px larger than
+   computed, ex: -1px top and left margins and 6px 6px 5px #aaa box-shadow results in what appears to be a 5px box-shadow.
+   Other browsers skip this step and it shouldn't affect you in most cases. In some rare cases it will result in
+   slightly narrower (by 1px) box shadows for IE 9+ on one or more of the drop downs. Without this, sometimes
+   the shadows could be 1px beyond their drop down resulting in a gap. This is the first of the two patches below.
+   and also relates to the MS CSSOM which uses decimal fractions of pixels for layout while only reporting rounded values.
    There appears to be no computedStyle workaround for this one. */
 
 //Scripted CSS Patch for IE 9+ intermittent mis-rendering of box-shadow elements (see above TECHNICAL NOTE for more info)
