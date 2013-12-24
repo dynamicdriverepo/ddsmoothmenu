@@ -34,7 +34,7 @@
 //** Feb 23rd, 2013 move CSS3 shadow adjustment for IE 9+ to the script, add resize event for all browsers to reposition open toggle 
 //** menus and shadows in window if they would have gone to a different position at the new window dimensions
 //** Feb 25th, 2013 (v2.0) All unofficial updates by John merged into official and now called v2.0. Changed "method" option's default value to "hover"
-
+//** Dec 24th, 2013 support IE 11
 var ddsmoothmenu = {
 
 ///////////////////////// Global Configuration Options: /////////////////////////
@@ -56,7 +56,7 @@ detecttouch: !!('ontouchstart' in window) || !!('ontouchstart' in document.docum
 detectwebkit: navigator.userAgent.toLowerCase().indexOf("applewebkit") > -1, //detect WebKit browsers (Safari, Chrome etc)
 idevice: /ipad|iphone/i.test(navigator.userAgent),
 detectie6: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] < 7;})(),
-detectie9: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] > 8;})(),
+    detectie9: (function () { var ie; return !!navigator.userAgent.match(/Trident.*rv:11\./) || (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] > 8; })(),
 ie9shadow: function(){},
 css3support: typeof document.documentElement.style.boxShadow === 'string' || (!document.all && document.querySelector), //detect browsers that support CSS3 box shadows (ie9+ or FF3.5+, Safari3+, Chrome etc)
 prevobjs: [], menus: null,
