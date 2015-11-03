@@ -2,6 +2,7 @@
 font: bold 12px Verdana;
 background: #414141; /*background of menu bar (default state)*/
 width: 100%;
+display: none;
 }
 
 .ddsmoothmenu ul{
@@ -94,6 +95,10 @@ top: 6px;
 right: 5px;
 }
 
+.leftarrowclass{
+margin-right: 5px;
+}
+
 /* ######### CSS for shadow added to sub menus  ######### */
 
 .ddshadow{ 
@@ -120,4 +125,166 @@ background-color: transparent;
 box-shadow: 5px 5px 5px #aaa; /* box-shadow color generally should be a little darker than that for the NON CSS3 capable browsers background-color */
 -moz-box-shadow: 5px 5px 5px #aaa;
 -webkit-box-shadow: 5px 5px 5px #aaa;
+}
+
+/* ######### Mobile menu container CSS ######### */
+
+div.ddsmoothmobile{ /* main mobile menu container */
+background: #414141;
+color: white;
+position: fixed;
+top: 0;
+left: 0;
+width: 200px; /* width of mobile menu */
+height: 300px;
+overflow: hidden;
+visibility: hidden;
+border-radius: 0 0 10px 0;
+box-shadow: 0 0 10px gray;
+}
+
+div.ddsmoothmobile a{
+color: white;
+text-decoration: none;
+}
+
+div.ddsmoothmobile div.topulsdiv{ /* Single DIV that surrounds all top level ULs before being flattened, or the ULs on the "frontpage" of the menu */
+position: relative;
+background: #414141;
+overflow-y: auto;
+width: 100%;
+height: 100%;
+}
+
+
+div.ddsmoothmobile ul{ /* style for all ULs in general inside mobile menu */
+list-style: none;
+width: 100%;
+top: 0;
+left: 0;
+background: #414141;
+margin: 0;
+padding: 0;
+}
+
+div.ddsmoothmobile div.topulsdiv ul.submenu{ /* top level ULs style */
+}
+
+
+div.ddsmoothmobile ul.submenu{ /* sub level ULs style */
+position: absolute;
+height: 100%;
+overflow-y: auto;
+}
+
+div.ddsmoothmobile ul li{
+border-bottom: 1px solid gray;
+position: relative;
+font-weight: bold;
+}
+
+div.ddsmoothmobile ul li.breadcrumb{ /* breadcrumb LI that's added to the top of every sub level UL */
+cursor: pointer;
+padding: 10px;
+background: black;
+}
+
+div.ddsmoothmobile ul li a{
+display: block;
+padding: 6px;
+}
+
+div.ddsmoothmobile ul li a:hover{
+background: black;
+}
+
+/* ############# Animated Drawer icon (mobile menu toggler) CSS ############# */
+
+.animateddrawer{
+	font-size: 10px; /* Base font size. Adjust this value to modify size of drawer icon */
+  width: 3em; 
+  height: 2.8em; 
+  outline: none;
+	position: fixed; /* BY default, make toggler fixed on screen */
+	display: none;
+	top: 10px; /* Position at upper right corner */
+	right: 10px;
+	background: white;
+	z-index: 1000;
+}
+
+.animateddrawer:before, .animateddrawer:after{
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 0.6em; /* height of top and bottom drawer line */
+  background: black;
+  border-radius: 2px;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  -webkit-transition: all 0.3s ease-in; /* set transition type and time */
+  transition: all 0.3s ease-in; 
+}
+
+.animateddrawer:after{
+  top: auto;
+  bottom: 0;
+}
+
+.animateddrawer span{
+  width: 100%;
+  height: 0.6em; /* height of middle drawer line */
+  background: black;
+  position: absolute;
+  top: 50%;
+  margin-top: -0.3em; /* set this to - half of middle drawer line height */
+  border-radius: 2px;
+  -ms-transform-origin: 50% 50%;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition: all 0.3s ease-in 0.3s; /* set transition type and time */
+  transition: all 0.3s ease-in 0.3s;
+}
+
+.animateddrawer span::after{
+  content: '';
+  display: block;
+  width: 100%;
+  height: 0.6em; /* height of middle drawer line */
+  background: black;
+  border-radius: 2px;
+  position: absolute;
+  -ms-transform-origin: 50% 50%;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition: all 0.3s ease-in 0.3s; /* set transition type and time */
+  transition: all 0.3s ease-in 0.3s;
+}
+
+.animateddrawer.open{
+}
+
+.animateddrawer.open:before{ /* style when .open class is added to button */
+  top: 50%;
+  margin-top: -0.3em; /* set this to - half of top drawer line height */
+  opacity: 0;
+}
+
+.animateddrawer.open:after{ /* style when .open class is added to button */
+  bottom: 50%;
+  opacity: 0;
+}
+
+.animateddrawer.open span{ /* style when .open class is added to button */
+  -ms-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.animateddrawer.open span:after{ /* style when .open class is added to button */
+  -ms-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }

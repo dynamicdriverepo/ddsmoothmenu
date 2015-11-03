@@ -9,6 +9,7 @@
 + jQuery 1.4 or above (served via Google CDN)
 + ddsmoothmenu.js
 + ddsmoothmenu.css
++ ddsmoothmenu-v.css
 + 4 images
 
 *Step 2:* Add the below code to the HEAD section of your page:
@@ -23,7 +24,7 @@
 	
 	/***********************************************
 	* Smooth Navigational Menu- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
-	* This notice MUST stay intact for legal use
+	* Please keep this notice intact
 	* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
 	***********************************************/
 	
@@ -53,6 +54,11 @@
 
 *Step 3:* Then, add the below sample markup to your page:
 
+	<!-- Markup for mobile menu toggler. Hidden by default, only shown when in mobile menu mode -->
+	<a class="animateddrawer" id="ddsmoothmenu-mobiletoggle" href="#">
+	<span></span>
+	</a>
+	
 	<h2>Example 1</h2>
 	
 	<div id="smoothmenu1" class="ddsmoothmenu">
