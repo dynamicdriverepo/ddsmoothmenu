@@ -43,6 +43,7 @@
 //** March 17th, 15' (v3.0): Adds fully mobile friendly, compact version of menu that's activated in mobile and small screen browsers.
 //** Refines drop down menu behaviour when there's neither space to the right nor left to accommodate sub menu; in that case sub menu overlaps parent menu.
 //** Nov 3rd, 15' (v3.01): Fixed long drop down menus causing a vertical document scrollbar when page loads
+//** April 1st, 16' (v3.02): Fixed Chrome desktop falsely reporting as touch enabled, requiring clicking on menu items to drop down.
 var ddsmoothmenu = {
 
 ///////////////////////// Global Configuration Options: /////////////////////////
@@ -64,6 +65,8 @@ overarrowre: /(?=\.(gif|jpg|jpeg|png|bmp))/i,
 overarrowaddtofilename: '_over',
 detecttouch: !!('ontouchstart' in window) || !!('ontouchstart' in document.documentElement) || !!window.ontouchstart || (!!window.Touch && !!window.Touch.length) || !!window.onmsgesturechange || (window.DocumentTouch && window.document instanceof window.DocumentTouch),
 detectwebkit: navigator.userAgent.toLowerCase().indexOf("applewebkit") > -1, //detect WebKit browsers (Safari, Chrome etc)
+detectchrome: navigator.userAgent.toLowerCase().indexOf("chrome") > -1, //detect chrome
+ismobile: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) != null, //boolean check for popular mobile browsers
 idevice: /ipad|iphone/i.test(navigator.userAgent),
 detectie6: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] < 7;})(),
 detectie9: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] > 8;})(),
@@ -293,6 +296,8 @@ buildmobilemenu: function($, setting, $ul){
 },
 
 buildmenu: function($, setting){
+	// additional step to detect true touch support. Chrome desktop mistakenly returns true for this.detecttouch
+	var detecttruetouch = (this.detecttouch && !this.detectchrome) || (this.detectchrome && this.ismobile)
 	var smoothmenu = ddsmoothmenu;
 	smoothmenu.globaltrackopen = smoothmenu.closeonnonmenuclick || smoothmenu.closeonmouseout;
 	var zsub = 0; //subtractor to be incremented so that each top level menu can be covered by previous one's drop downs
@@ -300,7 +305,7 @@ buildmenu: function($, setting){
 	var $mainparent = $("#"+setting.mainmenuid).removeClass("ddsmoothmenu ddsmoothmenu-v").addClass(setting.classname || "ddsmoothmenu");
 	setting.repositionv = setting.repositionv !== false;
 	var $mainmenu = $mainparent.find('>ul'); //reference main menu UL
-	var method = smoothmenu.detecttouch? 'toggle' : setting.method === 'toggle'? 'toggle' : 'hover';
+	var method = (detecttruetouch)? 'toggle' : setting.method === 'toggle'? 'toggle' : 'hover';
 	var $topheaders = $mainmenu.find('>li>ul').parent();//has('ul');
 	var orient = setting.orientation!='v'? 'down' : 'right', $parentshadow = $(document.body);
 	$mainmenu.click(function(e){e.target.href === smoothmenu.emptyhash && e.preventDefault();});
