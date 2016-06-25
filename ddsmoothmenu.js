@@ -779,3 +779,7 @@ if(ddsmoothmenu.detectie9){
 		}); //end jQuery Patch for IE 9+ .height() and .width()
 	})(jQuery);
 }
+
+if ( typeof module !== "undefined" && module.exports ) {
+	module.exports = ddsmoothmenu;
+}
