@@ -83,21 +83,21 @@
     detectchrome: navigator.userAgent.toLowerCase().indexOf("chrome") > -1, //detect chrome
     ismobile: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) != null, //boolean check for popular mobile browsers
     idevice: /ipad|iphone/i.test(navigator.userAgent),
-    detectie6: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] < 7;})(),
-    detectie9: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] > 8;})(),
-    ie9shadow: function(){},
+    detectie6: (function() {var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] < 7;})(),
+    detectie9: (function() {var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] > 8;})(),
+    ie9shadow: function() {},
     css3support: typeof document.documentElement.style.boxShadow === 'string' || (!document.all && document.querySelector), //detect browsers that support CSS3 box shadows (ie9+ or FF3.5+, Safari3+, Chrome etc)
     prevobjs: [], menus: null,
     mobilecontainer: {$main: null, $topulsdiv: null, $toggler: null, hidetimer: null},
     mobilezindexvalue: 2000, // mobile menus starting zIndex
 
-    executelink: function($, prevobjs, e){
+    executelink: function($, prevobjs, e) {
       var prevscount = prevobjs.length, link = e.target;
-      while(--prevscount > -1){
-        if(prevobjs[prevscount] === this){
+      while(--prevscount > -1) {
+        if (prevobjs[prevscount] === this) {
           prevobjs.splice(prevscount, 1);
-          if(link.href !== ddsmoothmenu.emptyhash && link.href && $(link).is('a') && !$(link).children('span.' + ddsmoothmenu.arrowimages.down[0] +', span.' + ddsmoothmenu.arrowimages.right[0]).length){
-            if(link.target && link.target !== '_self'){
+          if (link.href !== ddsmoothmenu.emptyhash && link.href && $(link).is('a') && !$(link).children('span.' + ddsmoothmenu.arrowimages.down[0] +', span.' + ddsmoothmenu.arrowimages.right[0]).length) {
+            if (link.target && link.target !== '_self') {
               window.open(link.href, link.target);
             } else {
               window.location.href = link.href;
@@ -108,7 +108,7 @@
       }
     },
 
-    repositionv: function($subul, $link, newtop, winheight, doctop, method, menutop){
+    repositionv: function($subul, $link, newtop, winheight, doctop, method, menutop) {
       menutop = menutop || 0;
       var topinc = 0, doclimit = winheight + doctop;
       $subul.css({top: newtop, display: 'block'});
@@ -116,18 +116,18 @@
         $subul.css({top: ++newtop});
         ++topinc;
       }
-      if(!topinc && $link.offset().top + $link.outerHeight() < doclimit && $subul.data('height') + $subul.offset().top > doclimit){
+      if (!topinc && $link.offset().top + $link.outerHeight() < doclimit && $subul.data('height') + $subul.offset().top > doclimit) {
         $subul.css({top: doctop - $link.parents('ul').last().offset().top - $link.position().top});
       }
       method === 'toggle' && $subul.css({display: 'none'});
-      if(newtop !== menutop){$subul.addClass('repositionedv');}
+      if (newtop !== menutop) {$subul.addClass('repositionedv');}
       return [topinc, newtop];
     },
 
-    updateprev: function($, prevobjs, $curobj){
+    updateprev: function($, prevobjs, $curobj) {
       var prevscount = prevobjs.length, prevobj, $indexobj = $curobj.parents().add(this);
-      while(--prevscount > -1){
-        if($indexobj.index((prevobj = prevobjs[prevscount])) < 0){
+      while(--prevscount > -1) {
+        if ($indexobj.index((prevobj = prevobjs[prevscount])) < 0) {
           $(prevobj).trigger('click', [1]);
           prevobjs.splice(prevscount, 1);
         }
@@ -135,26 +135,26 @@
       prevobjs.push(this);
     },
 
-    subulpreventemptyclose: function(e){
+    subulpreventemptyclose: function(e) {
       var link = e.target;
-      if(link.href === ddsmoothmenu.emptyhash && $(link).parent('li').find('ul').length < 1){
+      if (link.href === ddsmoothmenu.emptyhash && $(link).parent('li').find('ul').length < 1) {
         e.preventDefault();
         e.stopPropagation();
       }
     },
 
-    getajaxmenu: function($, setting, nobuild){ //function to fetch external page containing the panel DIVs
+    getajaxmenu: function($, setting, nobuild) { //function to fetch external page containing the panel DIVs
       var $menucontainer=$('#'+setting.contentsource[0]); //reference empty div on page that will hold menu
       $menucontainer.html("Loading Menu...");
       $.ajax({
         url: setting.contentsource[1], //path to external menu file
         async: true,
         dataType: 'html',
-        error: function(ajaxrequest){
+        error: function(ajaxrequest) {
           setting.menustate = "error"
           $menucontainer.html('Error fetching content. Server Response: '+ajaxrequest.responseText);
         },
-        success: function(content){
+        success: function(content) {
           setting.menustate = "fetched"
           $menucontainer.html(content).find('#' + setting.mainmenuid).css('display', 'block');
           !!!nobuild && ddsmoothmenu.buildmenu($, setting);
@@ -162,17 +162,17 @@
       });
     },
 
-    getajaxmenuMobile: function($, setting){ //function to fetch external page containing the primary menu UL
+    getajaxmenuMobile: function($, setting) { //function to fetch external page containing the primary menu UL
       setting.mobilemenustate = 'fetching'
       $.ajax({
         url: setting.contentsource[1], //path to external menu file
         async: true,
         dataType: 'html',
-        error: function(ajaxrequest){
+        error: function(ajaxrequest) {
           setting.mobilemenustate = 'error'
           alert("Error fetching Ajax content " + ajaxrequest.responseText)
         },
-        success: function(content){
+        success: function(content) {
           var $ul = $(content).find('>ul')
           setting.mobilemenustate = 'fetched'
           ddsmoothmenu.buildmobilemenu($, setting, $ul);
@@ -180,12 +180,12 @@
       });
     },
 
-    closeall: function(e){
+    closeall: function(e) {
       var smoothmenu = ddsmoothmenu, prevscount;
-      if(!smoothmenu.globaltrackopen){return;}
-      if(e.type === 'mouseleave' || ((e.type === 'click' || e.type === 'touchstart') && smoothmenu.menus.index(e.target) < 0)){
+      if (!smoothmenu.globaltrackopen) {return;}
+      if (e.type === 'mouseleave' || ((e.type === 'click' || e.type === 'touchstart') && smoothmenu.menus.index(e.target) < 0)) {
         prevscount = smoothmenu.prevobjs.length;
-        while(--prevscount > -1){
+        while(--prevscount > -1) {
           $(smoothmenu.prevobjs[prevscount]).trigger('click');
           smoothmenu.prevobjs.splice(prevscount, 1);
         }
@@ -194,34 +194,34 @@
 
     emptyhash: $('<a href="#"></a>').get(0).href,
 
-    togglemobile: function(action, duration){
+    togglemobile: function(action, duration) {
       if (!this.mobilecontainer.$main)
         return
       clearTimeout(this.mobilecontainer.hidetimer)
       var $mobilemenu = this.mobilecontainer.$main
       var duration = duration || this.mobiletransition
-      if ($mobilemenu.css('visibility') == 'hidden' && (!action || action == 'open')){
+      if ($mobilemenu.css('visibility') == 'hidden' && (!action || action == 'open')) {
         $mobilemenu.css({left: '-100%', visibility: 'visible'}).animate({left: 0}, duration)
         this.mobilecontainer.$toggler.addClass('open')
       }
-      else if ($mobilemenu.css('visibility') == 'visible' && (!action || action != 'open')){
-        $mobilemenu.animate({left: '-100%'}, duration, function(){this.style.visibility = 'hidden'})
+      else if ($mobilemenu.css('visibility') == 'visible' && (!action || action != 'open')) {
+        $mobilemenu.animate({left: '-100%'}, duration, function() {this.style.visibility = 'hidden'})
         this.mobilecontainer.$toggler.removeClass('open')
       }
       return false
 
     },
 
-    buildmobilemenu: function($, setting, $ul){
+    buildmobilemenu: function($, setting, $ul) {
 
-      function flattenuls($mainul, cloneulBol, callback, finalcall){
-        var callback = callback || function(){}
-        var finalcall = finalcall || function(){}
+      function flattenuls($mainul, cloneulBol, callback, finalcall) {
+        var callback = callback || function() {}
+        var finalcall = finalcall || function() {}
         var $headers = $mainul.find('ul').parent()
         var $mainulcopy = cloneulBol? $mainul.clone() : $mainul
         var $flattened = jQuery(document.createDocumentFragment())
         var $headers = $mainulcopy.find('ul').parent()
-        for (var i=$headers.length-1; i>=0; i--){ // loop through headers backwards, so we end up with topmost UL last
+        for (var i=$headers.length-1; i>=0; i--) { // loop through headers backwards, so we end up with topmost UL last
           var $header = $headers.eq(i)
           var $subul = $header.find('>ul').prependTo($flattened)
           callback(i, $header, $subul)
@@ -236,13 +236,13 @@
       var $topulref = null
 
       var flattened = flattenuls($mainul, false,
-                                 function(i, $header, $subul){ // loop through header LIs and sub ULs
+                                 function(i, $header, $subul) { // loop through header LIs and sub ULs
                                    $subul.addClass("submenu")
                                    var $breadcrumb = $('<li class="breadcrumb" />')
                                          .html('<img src="' + ddsmoothmenu.arrowimages.left[1] +'" class="' + ddsmoothmenu.arrowimages.left[0] +'" />' + $header.text())
                                          .prependTo($subul)
                                    $header.find('a:eq(0)').append('<img src="' + ddsmoothmenu.arrowimages.right[1] +'" class="' + ddsmoothmenu.arrowimages.right[0] +'" />')
-                                   $header.on('click', function(e){
+                                   $header.on('click', function(e) {
                                      var $headermenu = $(this).parent('ul')
                                      $headermenu = $headermenu.hasClass('submenu')? $headermenu : $headermenu.parent()
                                      $headermenu.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: 0}).animate({left: '-100%'}, ddsmoothmenu.mobiletransition)
@@ -250,7 +250,7 @@
                                      e.stopPropagation()
                                      e.preventDefault()
                                    })
-                                   $breadcrumb.on('click', function(e){
+                                   $breadcrumb.on('click', function(e) {
                                      var $headermenu = $header.parent('ul')
                                      $headermenu = $headermenu.hasClass('submenu')? $headermenu : $headermenu.parent()
                                      $headermenu.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: '-100%'}).animate({left: 0}, ddsmoothmenu.mobiletransition)
@@ -259,37 +259,37 @@
                                      e.preventDefault()
                                    })
                                  },
-                                 function($topul){
+                                 function($topul) {
                                    $topulref = $topul
                                  }
                                 )
 
 
-      if (!this.mobilecontainer.$main){ // if primary mobile menu container not defined yet
+      if (!this.mobilecontainer.$main) { // if primary mobile menu container not defined yet
         var $maincontainer = $('<div class="ddsmoothmobile"><div class="topulsdiv"></div></div>').appendTo(document.body)
         $maincontainer
           .css({zIndex: this.mobilezindexvalue++, left: '-100%', visibility: 'hidden'})
-          .on('click', function(e){ // assign click behavior to mobile container
-            ddsmoothmenu.mobilecontainer.hidetimer = setTimeout(function(){
+          .on('click', function(e) { // assign click behavior to mobile container
+            ddsmoothmenu.mobilecontainer.hidetimer = setTimeout(function() {
               ddsmoothmenu.togglemobile('close', 0)
             }, 50)
             e.stopPropagation()
           })
-          .on('touchstart', function(e){
+          .on('touchstart', function(e) {
             e.stopPropagation()
           })
         var $topulsdiv = $maincontainer.find('div.topulsdiv')
         var $mobiletoggler = $('#ddsmoothmenu-mobiletoggle').css({display: 'block'})
         $mobiletoggler
-          .on('click', function(e){ // assign click behavior to main mobile menu toggler
+          .on('click', function(e) { // assign click behavior to main mobile menu toggler
             ddsmoothmenu.togglemobile()
             e.stopPropagation()
           })
-          .on('touchstart', function(e){
+          .on('touchstart', function(e) {
             e.stopPropagation()
           })
         var hidemobilemenuevent = /(iPad|iPhone|iPod)/g.test( navigator.userAgent )? 'touchstart' : 'click' // ios doesnt seem to respond to clicks on BODY
-        $(document.body).on(hidemobilemenuevent, function(e){
+        $(document.body).on(hidemobilemenuevent, function(e) {
           if (!$maincontainer.is(':animated'))
             ddsmoothmenu.togglemobile('close', 0)
         })
@@ -310,7 +310,7 @@
 
     },
 
-    buildmenu: function($, setting){
+    buildmenu: function($, setting) {
       // additional step to detect true touch support. Chrome desktop mistakenly returns true for this.detecttouch
       var detecttruetouch = (this.detecttouch && !this.detectchrome) || (this.detectchrome && this.ismobile)
       var smoothmenu = ddsmoothmenu;
@@ -323,48 +323,48 @@
       var method = (detecttruetouch)? 'toggle' : setting.method === 'toggle'? 'toggle' : 'hover';
       var $topheaders = $mainmenu.find('>li>ul').parent();//has('ul');
       var orient = setting.orientation!='v'? 'down' : 'right', $parentshadow = $(document.body);
-      $mainmenu.click(function(e){e.target.href === smoothmenu.emptyhash && e.preventDefault();});
-      if(method === 'toggle') {
-        if(smoothmenu.globaltrackopen){
+      $mainmenu.click(function(e) {e.target.href === smoothmenu.emptyhash && e.preventDefault();});
+      if (method === 'toggle') {
+        if (smoothmenu.globaltrackopen) {
           smoothmenu.menus = smoothmenu.menus? smoothmenu.menus.add($mainmenu.add($mainmenu.find('*'))) : $mainmenu.add($mainmenu.find('*'));
         }
-        if(smoothmenu.closeonnonmenuclick){
-          if(orient === 'down'){$mainparent.click(function(e){e.stopPropagation();});}
+        if (smoothmenu.closeonnonmenuclick) {
+          if (orient === 'down') {$mainparent.click(function(e) {e.stopPropagation();});}
           $(document).unbind('click.smoothmenu').bind('click.smoothmenu', smoothmenu.closeall);
-          if(smoothmenu.idevice){
+          if (smoothmenu.idevice) {
             document.removeEventListener('touchstart', smoothmenu.closeall, false);
             document.addEventListener('touchstart', smoothmenu.closeall, false);
           }
-        } else if (setting.closeonnonmenuclick){
-          if(orient === 'down'){$mainparent.click(function(e){e.stopPropagation();});}
-          $(document).bind('click.' + setting.mainmenuid, function(e){$mainmenu.find('li>a.selected').parent().trigger('click');});
-          if(smoothmenu.idevice){
-            document.addEventListener('touchstart', function(e){$mainmenu.find('li>a.selected').parent().trigger('click');}, false);
+        } else if (setting.closeonnonmenuclick) {
+          if (orient === 'down') {$mainparent.click(function(e) {e.stopPropagation();});}
+          $(document).bind('click.' + setting.mainmenuid, function(e) {$mainmenu.find('li>a.selected').parent().trigger('click');});
+          if (smoothmenu.idevice) {
+            document.addEventListener('touchstart', function(e) {$mainmenu.find('li>a.selected').parent().trigger('click');}, false);
           }
         }
-        if(smoothmenu.closeonmouseout){
+        if (smoothmenu.closeonmouseout) {
           var $leaveobj = orient === 'down'? $mainparent : $mainmenu;
           $leaveobj.bind('mouseleave.smoothmenu', smoothmenu.closeall);
-        } else if (setting.closeonmouseout){
+        } else if (setting.closeonmouseout) {
           var $leaveobj = orient === 'down'? $mainparent : $mainmenu;
-          $leaveobj.bind('mouseleave.smoothmenu', function(){$mainmenu.find('li>a.selected').parent().trigger('click');});
+          $leaveobj.bind('mouseleave.smoothmenu', function() {$mainmenu.find('li>a.selected').parent().trigger('click');});
         }
-        if(!$('style[title="ddsmoothmenushadowsnone"]').length){
+        if (!$('style[title="ddsmoothmenushadowsnone"]').length) {
           $('head').append('<style title="ddsmoothmenushadowsnone" type="text/css">.ddsmoothmenushadowsnone{display:none!important;}</style>');
         }
         var shadowstimer;
-        $(window).bind('resize scroll', function(){
+        $(window).bind('resize scroll', function() {
           clearTimeout(shadowstimer);
           var $selected = $mainmenu.find('li>a.selected').parent(),
               $shadows = $('.ddshadow').addClass('ddsmoothmenushadowsnone');
           $selected.eq(0).trigger('click');
           $selected.trigger('click');
           if ( !window.matchMedia || (window.matchMedia && !setting.mobilemql.matches))
-            shadowstimer = setTimeout(function(){$shadows.removeClass('ddsmoothmenushadowsnone');}, 100);
+            shadowstimer = setTimeout(function() {$shadows.removeClass('ddsmoothmenushadowsnone');}, 100);
         });
       }
 
-      $topheaders.each(function(){
+      $topheaders.each(function() {
         var $curobj=$(this).css({zIndex: (setting.zindexvalue || smoothmenu.zindexvalue) + zsub--}); //reference current LI header
         var $subul=$curobj.children('ul:eq(0)').css({display:'block'}).data('timers', {});
         var $link = $curobj.children("a:eq(0)").css({paddingRight: smoothmenu.arrowimages[orient][2]}).append( //add arrow images
@@ -378,13 +378,13 @@
         };
         var menutop = orient === 'down'? dimensions.h : 0;
         $subul.css({top: menutop});
-        function restore(){$link.removeClass('selected');}
+        function restore() {$link.removeClass('selected');}
         method === 'toggle' && $subul.click(smoothmenu.subulpreventemptyclose);
         $curobj[method](
-          function(e){
-            if(!$curobj.data('headers')){
+          function(e) {
+            if (!$curobj.data('headers')) {
               smoothmenu.buildsubheaders($, $subul, $subul.find('>li>ul').parent(), setting, method, prevobjs);
-              $curobj.data('headers', true).find('>ul').each(function(i, ul){
+              $curobj.data('headers', true).find('>ul').each(function(i, ul) {
                 var $ul = $(ul);
                 $ul.data('height', $ul.outerHeight());
               }).css({display:'none', visibility:'visible'});
@@ -392,27 +392,27 @@
             method === 'toggle' && smoothmenu.updateprev.call(this, $, prevobjs, $curobj);
             clearTimeout($subul.data('timers').hidetimer);
             $link.addClass('selected');
-            $subul.data('timers').showtimer=setTimeout(function(){
+            $subul.data('timers').showtimer=setTimeout(function() {
               var menuleft = orient === 'down'? 0 : dimensions.w;
               var menumoved = menuleft, newtop, doctop, winheight, topinc = 0;
               var offsetLeft = $curobj.offset().left
               menuleft=(offsetLeft+menuleft+dimensions.subulw>$(window).width())? (orient === 'down'? -dimensions.subulw+dimensions.w : -dimensions.w) : menuleft;
               //calculate this sub menu's offsets from its parent
-              if (orient === 'right' && menuleft < 0){ // for vertical menu, if top level sub menu drops left, test to see if it'll be obscured by left window edge
+              if (orient === 'right' && menuleft < 0) { // for vertical menu, if top level sub menu drops left, test to see if it'll be obscured by left window edge
                 var scrollX = window.pageXOffset || (document.documentElement || document.body.parentNode || document.body).scrollLeft
                 if (offsetLeft - dimensions.subulw < 0) // if menu will be obscured by left window edge
                   menuleft = 0
               }
               menumoved = menumoved !== menuleft;
               $subul.css({top: menutop}).removeClass('repositionedv');
-              if(setting.repositionv && $link.offset().top + menutop + $subul.data('height') > (winheight = $(window).height()) + (doctop = $(document).scrollTop())){
+              if (setting.repositionv && $link.offset().top + menutop + $subul.data('height') > (winheight = $(window).height()) + (doctop = $(document).scrollTop())) {
                 newtop = (orient === 'down'? 0 : $link.outerHeight()) - $subul.data('height');
                 topinc = smoothmenu.repositionv($subul, $link, newtop, winheight, doctop, method, menutop)[0];
               }
-              $subul.css({left:menuleft, width:dimensions.subulw}).stop(true, true).animate({height:'show',opacity:'show'}, smoothmenu.transition.overtime, function(){this.style.removeAttribute && this.style.removeAttribute('filter');});
-              if(menumoved){$subul.addClass('repositioned');} else {$subul.removeClass('repositioned');}
-              if (setting.shadow){
-                if(!$curobj.data('$shadow')){
+              $subul.css({left:menuleft, width:dimensions.subulw}).stop(true, true).animate({height:'show',opacity:'show'}, smoothmenu.transition.overtime, function() {this.style.removeAttribute && this.style.removeAttribute('filter');});
+              if (menumoved) {$subul.addClass('repositioned');} else {$subul.removeClass('repositioned');}
+              if (setting.shadow) {
+                if (!$curobj.data('$shadow')) {
                   $curobj.data('$shadow', $('<div></div>').addClass('ddshadow toplevelshadow').prependTo($parentshadow).css({zIndex: $curobj.css('zIndex')}));  //insert shadow DIV and set it to parent node for the next shadow div
                 }
                 smoothmenu.ie9shadow($curobj.data('$shadow'));
@@ -423,18 +423,18 @@
               }
             }, smoothmenu.showhidedelay.showdelay);
           },
-          function(e, speed){
+          function(e, speed) {
             var $shadow = $curobj.data('$shadow');
-            if(method === 'hover'){restore();}
+            if (method === 'hover') {restore();}
             else{smoothmenu.executelink.call(this, $, prevobjs, e);}
             clearTimeout($subul.data('timers').showtimer);
-            $subul.data('timers').hidetimer=setTimeout(function(){
-              $subul.stop(true, true).animate({height:'hide', opacity:'hide'}, speed || smoothmenu.transition.outtime, function(){method === 'toggle' && restore();});
-              if ($shadow){
-                if (!smoothmenu.css3support && smoothmenu.detectwebkit){ //in WebKit browsers, set first child shadow's opacity to 0, as "overflow:hidden" doesn't work in them
+            $subul.data('timers').hidetimer=setTimeout(function() {
+              $subul.stop(true, true).animate({height:'hide', opacity:'hide'}, speed || smoothmenu.transition.outtime, function() {method === 'toggle' && restore();});
+              if ($shadow) {
+                if (!smoothmenu.css3support && smoothmenu.detectwebkit) { //in WebKit browsers, set first child shadow's opacity to 0, as "overflow:hidden" doesn't work in them
                   $shadow.children('div:eq(0)').css({opacity:0});
                 }
-                $shadow.stop(true, true).animate({height:0}, speed || smoothmenu.transition.outtime, function(){if(method === 'toggle'){this.style.overflow = 'hidden';}});
+                $shadow.stop(true, true).animate({height:0}, speed || smoothmenu.transition.outtime, function() {if (method === 'toggle') {this.style.overflow = 'hidden';}});
               }
             }, smoothmenu.showhidedelay.hidedelay);
           }
@@ -443,10 +443,10 @@
       }); //end $topheaders.each()
     },
 
-    buildsubheaders: function($, $subul, $headers, setting, method, prevobjs){
+    buildsubheaders: function($, $subul, $headers, setting, method, prevobjs) {
       //setting.$mainparent.data('$headers').add($headers);
       $subul.css('display', 'block');
-      $headers.each(function(){ //loop through each LI header
+      $headers.each(function() { //loop through each LI header
         var smoothmenu = ddsmoothmenu;
         var $curobj=$(this).css({zIndex: $(this).parent('ul').css('z-index')}); //reference current LI header
         var $subul=$curobj.children('ul:eq(0)').css({display:'block'}).data('timers', {}), $parentshadow;
@@ -460,12 +460,12 @@
           subulh	: $subul.outerHeight()
         };
         $subul.css({top: 0});
-        function restore(){$link.removeClass('selected');}
+        function restore() {$link.removeClass('selected');}
         $curobj[method](
-          function(e){
-            if(!$curobj.data('headers')){
+          function(e) {
+            if (!$curobj.data('headers')) {
               smoothmenu.buildsubheaders($, $subul, $subul.find('>li>ul').parent(), setting, method, prevobjs);
-              $curobj.data('headers', true).find('>ul').each(function(i, ul){
+              $curobj.data('headers', true).find('>ul').each(function(i, ul) {
                 var $ul = $(ul);
                 $ul.data('height', $ul.height());
               }).css({display:'none', visibility:'visible'});
@@ -473,12 +473,12 @@
             method === 'toggle' && smoothmenu.updateprev.call(this, $, prevobjs, $curobj);
             clearTimeout($subul.data('timers').hidetimer);
             $link.addClass('selected');
-            $subul.data('timers').showtimer=setTimeout(function(){
+            $subul.data('timers').showtimer=setTimeout(function() {
               var menuleft= dimensions.w;
               var menumoved = menuleft, newtop, doctop, winheight, topinc = 0;
               var offsetLeft = $curobj.offset().left
               menuleft=(offsetLeft+menuleft+dimensions.subulw>$(window).width())? -dimensions.w : menuleft; //calculate this sub menu's offsets from its parent
-              if (menuleft < 0){ // if drop left, test to see if it'll be obscured by left window edge
+              if (menuleft < 0) { // if drop left, test to see if it'll be obscured by left window edge
                 var scrollX = window.pageXOffset || (document.documentElement || document.body.parentNode || document.body).scrollLeft
                 if (offsetLeft - dimensions.subulw < scrollX) // if menu will be obscured by left window edge
                   menuleft = 0
@@ -486,43 +486,43 @@
               menumoved = menumoved !== menuleft;
 
               $subul.css({top: 0}).removeClass('repositionedv');
-              if(setting.repositionv && $link.offset().top + $subul.data('height') > (winheight = $(window).height()) + (doctop = $(document).scrollTop())){
+              if (setting.repositionv && $link.offset().top + $subul.data('height') > (winheight = $(window).height()) + (doctop = $(document).scrollTop())) {
                 newtop = $link.outerHeight() - $subul.data('height');
                 topinc = smoothmenu.repositionv($subul, $link, newtop, winheight, doctop, method);
                 newtop = topinc[1];
                 topinc = topinc[0];
               }
-              $subul.css({left:menuleft, width:dimensions.subulw}).stop(true, true).animate({height:'show',opacity:'show'}, smoothmenu.transition.overtime, function(){this.style.removeAttribute && this.style.removeAttribute('filter');});
-              if(menumoved){$subul.addClass('repositioned');} else {$subul.removeClass('repositioned');}
-              if (setting.shadow){
-                if(!$curobj.data('$shadow')){
+              $subul.css({left:menuleft, width:dimensions.subulw}).stop(true, true).animate({height:'show',opacity:'show'}, smoothmenu.transition.overtime, function() {this.style.removeAttribute && this.style.removeAttribute('filter');});
+              if (menumoved) {$subul.addClass('repositioned');} else {$subul.removeClass('repositioned');}
+              if (setting.shadow) {
+                if (!$curobj.data('$shadow')) {
                   $parentshadow = $curobj.parents("li:eq(0)").data('$shadow');
                   $curobj.data('$shadow', $('<div></div>').addClass('ddshadow').prependTo($parentshadow).css({zIndex: $parentshadow.css('z-index')}));  //insert shadow DIV and set it to parent node for the next shadow div
                 }
                 var offsets = $subul.offset();
                 var shadowleft = menuleft;
                 var shadowtop = $curobj.position().top - (newtop? $subul.data('height') - $link.outerHeight() - topinc : 0);
-                if (smoothmenu.detectwebkit && !smoothmenu.css3support){ //in WebKit browsers, restore shadow's opacity to full
+                if (smoothmenu.detectwebkit && !smoothmenu.css3support) { //in WebKit browsers, restore shadow's opacity to full
                   $curobj.data('$shadow').css({opacity:1});
                 }
                 $curobj.data('$shadow').css({overflow: 'visible', width:dimensions.subulw, left:shadowleft, top:shadowtop}).stop(true, true).animate({height:dimensions.subulh}, smoothmenu.transition.overtime);
               }
             }, smoothmenu.showhidedelay.showdelay);
           },
-          function(e, speed){
+          function(e, speed) {
             var $shadow = $curobj.data('$shadow');
-            if(method === 'hover'){restore();}
+            if (method === 'hover') {restore();}
             else{smoothmenu.executelink.call(this, $, prevobjs, e);}
             clearTimeout($subul.data('timers').showtimer);
-            $subul.data('timers').hidetimer=setTimeout(function(){
-              $subul.stop(true, true).animate({height:'hide', opacity:'hide'}, speed || smoothmenu.transition.outtime, function(){
+            $subul.data('timers').hidetimer=setTimeout(function() {
+              $subul.stop(true, true).animate({height:'hide', opacity:'hide'}, speed || smoothmenu.transition.outtime, function() {
                 method === 'toggle' && restore();
               });
-              if ($shadow){
-                if (!smoothmenu.css3support && smoothmenu.detectwebkit){ //in WebKit browsers, set first child shadow's opacity to 0, as "overflow:hidden" doesn't work in them
+              if ($shadow) {
+                if (!smoothmenu.css3support && smoothmenu.detectwebkit) { //in WebKit browsers, set first child shadow's opacity to 0, as "overflow:hidden" doesn't work in them
                   $shadow.children('div:eq(0)').css({opacity:0});
                 }
-                $shadow.stop(true, true).animate({height:0}, speed || smoothmenu.transition.outtime, function(){if(method === 'toggle'){this.style.overflow = 'hidden';}});
+                $shadow.stop(true, true).animate({height:0}, speed || smoothmenu.transition.outtime, function() {if (method === 'toggle') {this.style.overflow = 'hidden';}});
               }
             }, smoothmenu.showhidedelay.hidedelay);
           }
@@ -531,20 +531,20 @@
     },
 
 
-    initmenu: function(setting){
-      if (setting.mobilemql.matches){ // if mobile mode
-        jQuery(function($){
+    initmenu: function(setting) {
+      if (setting.mobilemql.matches) { // if mobile mode
+        jQuery(function($) {
           var $mainmenu = $('#' + setting.mainmenuid)
           $mainmenu.css({display: 'none'}) // hide regular menu
-          //setTimeout(function(){$('.ddshadow').addClass('ddsmoothmenushadowsnone')}, 150)
-          if (!setting.$mainulclone){ // store a copy of the main menu's UL menu before it gets manipulated
+          //setTimeout(function() {$('.ddshadow').addClass('ddsmoothmenushadowsnone')}, 150)
+          if (!setting.$mainulclone) { // store a copy of the main menu's UL menu before it gets manipulated
             setting.$mainulclone = $mainmenu.find('>ul').clone()
           }
           var mobilemenustate = setting.mobilemenustate
-          if (setting.contentsource == "markup" && !mobilemenustate){ // if mobile menu not built yet
+          if (setting.contentsource == "markup" && !mobilemenustate) { // if mobile menu not built yet
             ddsmoothmenu.buildmobilemenu($, setting, setting.$mainulclone)
           }
-          else if (setting.contentsource != "markup" && (!mobilemenustate || mobilemenustate == "error")){ // if Ajax content and mobile menu not built yet
+          else if (setting.contentsource != "markup" && (!mobilemenustate || mobilemenustate == "error")) { // if Ajax content and mobile menu not built yet
             ddsmoothmenu.getajaxmenuMobile($, setting)
           }
           else{ // if mobile menu built already, just show mobile togger
@@ -555,10 +555,10 @@
       }
       else{ // if desktop mode
         var menustate = setting.menustate
-        if (menustate && menustate != "error"){ // if menustate is anything other than "error" (meaning error fetching ajax content), it means menu's built already, so exit init()
+        if (menustate && menustate != "error") { // if menustate is anything other than "error" (meaning error fetching ajax content), it means menu's built already, so exit init()
           var $mainmenu = $('#' + setting.mainmenuid)
           $mainmenu.css({display: 'block'}) // show regular menu
-          if (this.mobilecontainer.$main){ // if mobile menu defined, hide it
+          if (this.mobilecontainer.$main) { // if mobile menu defined, hide it
             this.togglemobile('close', 0)
           }
           $('#ddsmoothmenu-mobiletoggle').css({display: 'none'}) // hide mobile menu toggler
@@ -566,24 +566,24 @@
         }
       }
 
-      if(this.detectie6 && parseFloat(jQuery.fn.jquery) > 1.3){
-        this.initmenu = function(setting){
-          if (typeof setting.contentsource=="object"){ //if external ajax menu
-            jQuery(function($){ddsmoothmenu.getajaxmenu($, setting, 'nobuild');});
+      if (this.detectie6 && parseFloat(jQuery.fn.jquery) > 1.3) {
+        this.initmenu = function(setting) {
+          if (typeof setting.contentsource=="object") { //if external ajax menu
+            jQuery(function($) {ddsmoothmenu.getajaxmenu($, setting, 'nobuild');});
           }
           return false;
         };
         jQuery('link[href*="ddsmoothmenu"]').attr('disabled', true);
-        jQuery(function($){
+        jQuery(function($) {
           alert('You Seriously Need to Update Your Browser!\n\nDynamic Drive Smooth Navigational Menu Showing Text Only Menu(s)\n\nDEVELOPER\'s NOTE: This script will run in IE 6 when using jQuery 1.3.2 or less,\nbut not real well.');
           $('link[href*="ddsmoothmenu"]').attr('disabled', true);
         });
         return this.initmenu(setting);
       }
       var mainmenuid = '#' + setting.mainmenuid, right, down, stylestring = ['</style>\n'], stylesleft = setting.arrowswap? 4 : 2;
-      function addstyles(){
-        if(stylesleft){return;}
-        if (typeof setting.customtheme=="object" && setting.customtheme.length==2){ //override default menu colors (default/hover) with custom set?
+      function addstyles() {
+        if (stylesleft) {return;}
+        if (typeof setting.customtheme=="object" && setting.customtheme.length==2) { //override default menu colors (default/hover) with custom set?
           var mainselector=(setting.orientation=="v")? mainmenuid : mainmenuid+', '+mainmenuid;
           stylestring.push([mainselector,' ul li a {background:',setting.customtheme[0],';}\n',
                             mainmenuid,' ul li a:hover {background:',setting.customtheme[1],';}'].join(''));
@@ -592,12 +592,12 @@
         stylestring.reverse();
         jQuery('head').append(stylestring.join('\n'));
       }
-      if(setting.arrowswap){
+      if (setting.arrowswap) {
         right = ddsmoothmenu.arrowimages.right[1].replace(ddsmoothmenu.overarrowre, ddsmoothmenu.overarrowaddtofilename);
         down = ddsmoothmenu.arrowimages.down[1].replace(ddsmoothmenu.overarrowre, ddsmoothmenu.overarrowaddtofilename);
-        jQuery(new Image()).bind('load error', function(e){
+        jQuery(new Image()).bind('load error', function(e) {
           setting.rightswap = e.type === 'load';
-          if(setting.rightswap){
+          if (setting.rightswap) {
             stylestring.push([mainmenuid, ' ul li a:hover .', ddsmoothmenu.arrowimages.right[0], ', ',
                               mainmenuid, ' ul li a.selected .', ddsmoothmenu.arrowimages.right[0],
                               ' { background-image: url(', this.src, ');}'].join(''));
@@ -605,9 +605,9 @@
           --stylesleft;
           addstyles();
         }).attr('src', right);
-        jQuery(new Image()).bind('load error', function(e){
+        jQuery(new Image()).bind('load error', function(e) {
           setting.downswap = e.type === 'load';
-          if(setting.downswap){
+          if (setting.downswap) {
             stylestring.push([mainmenuid, ' ul li a:hover .', ddsmoothmenu.arrowimages.down[0], ', ',
                               mainmenuid, ' ul li a.selected .', ddsmoothmenu.arrowimages.down[0],
                               ' { background-image: url(', this.src, ');}'].join(''));
@@ -616,33 +616,33 @@
           addstyles();
         }).attr('src', down);
       }
-      jQuery(new Image()).bind('load error', function(e){
-        if(e.type === 'load'){
+      jQuery(new Image()).bind('load error', function(e) {
+        if (e.type === 'load') {
           stylestring.push([mainmenuid+' ul li a .', ddsmoothmenu.arrowimages.right[0],' { background: url(', this.src, ') no-repeat;width:', this.width,'px;height:', this.height, 'px;}'].join(''));
         }
         --stylesleft;
         addstyles();
       }).attr('src', ddsmoothmenu.arrowimages.right[1]);
-      jQuery(new Image()).bind('load error', function(e){
-        if(e.type === 'load'){
+      jQuery(new Image()).bind('load error', function(e) {
+        if (e.type === 'load') {
           stylestring.push([mainmenuid+' ul li a .', ddsmoothmenu.arrowimages.down[0],' { background: url(', this.src, ') no-repeat;width:', this.width,'px;height:', this.height, 'px;}'].join(''));
         }
         --stylesleft;
         addstyles();
       }).attr('src', ddsmoothmenu.arrowimages.down[1]);
       setting.shadow = this.detectie6 && (setting.method === 'hover' || setting.orientation === 'v')? false : setting.shadow || this.shadow; //in IE6, always disable shadow except for horizontal toggle menus
-      jQuery(document).ready(function($){
+      jQuery(document).ready(function($) {
         var $mainmenu = $('#' + setting.mainmenuid)
         $mainmenu.css({display: 'block'}) // show regular menu (in case previously hidden by mobile menu activation)
-        if (ddsmoothmenu.mobilecontainer.$main){ // if mobile menu defined, hide it
+        if (ddsmoothmenu.mobilecontainer.$main) { // if mobile menu defined, hide it
           ddsmoothmenu.togglemobile('close', 0)
         }
         $('#ddsmoothmenu-mobiletoggle').css({display: 'none'}) // hide mobile menu toggler
-        if (!setting.$mainulclone){ // store a copy of the main menu's UL menu before it gets manipulated
+        if (!setting.$mainulclone) { // store a copy of the main menu's UL menu before it gets manipulated
           setting.$mainulclone = $mainmenu.find('>ul').clone()
         }
-        if (setting.shadow && ddsmoothmenu.css3support){$('body').addClass('ddcss3support');}
-        if (typeof setting.contentsource=="object"){ //if external ajax menu
+        if (setting.shadow && ddsmoothmenu.css3support) {$('body').addClass('ddcss3support');}
+        if (typeof setting.contentsource=="object") { //if external ajax menu
           ddsmoothmenu.getajaxmenu($, setting);
         }
         else{ //else if markup menu
@@ -653,10 +653,10 @@
       });
     },
 
-    init: function(setting){
-      setting.mobilemql = (window.matchMedia)? window.matchMedia(this.mobilemediaquery) : {matches: false, addListener: function(){}}
+    init: function(setting) {
+      setting.mobilemql = (window.matchMedia)? window.matchMedia(this.mobilemediaquery) : {matches: false, addListener: function() {}}
       this.initmenu(setting)
-      setting.mobilemql.addListener(function(){
+      setting.mobilemql.addListener(function() {
         ddsmoothmenu.initmenu(setting)
       })
     }
@@ -665,16 +665,16 @@
 
   // Patch for jQuery 1.9+ which lack click toggle (deprecated in 1.8, removed in 1.9)
   // Will not run if using another patch like jQuery Migrate, which also takes care of this
-  if(
-    (function($){
+  if (
+    (function($) {
       var clicktogglable = false;
       try {
-        $('<a href="#"></a>').toggle(function(){}, function(){clicktogglable = true;}).trigger('click').trigger('click');
-      } catch(e){}
+        $('<a href="#"></a>').toggle(function() {}, function() {clicktogglable = true;}).trigger('click').trigger('click');
+      } catch(e) {}
       return !clicktogglable;
     })(jQuery)
-  ){
-    (function(){
+  ) {
+    (function() {
       var toggleDisp = jQuery.fn.toggle; // There's an animation/css method named .toggle() that toggles display. Save a reference to it.
       jQuery.extend(jQuery.fn, {
         toggle: function( fn, fn2 ) {
@@ -722,10 +722,10 @@
   //And jQuery Patch for IE 9+ CSSOM re: offset Width and Height and re: getBoundingClientRect(). Both run only in IE 9 and later.
   //IE 9 + uses decimal fractions of pixels internally for layout but only reports rounded values using the offset and getBounding methods.
   //These are sometimes rounded inconsistently. This second patch gets the decimal values directly from computedStyle.
-  if(ddsmoothmenu.detectie9){
-    (function($){ //begin Scripted CSS Patch
-      function incdec(v, how){return parseInt(v) + how + 'px';}
-      ddsmoothmenu.ie9shadow = function($elem){ //runs once
+  if (ddsmoothmenu.detectie9) {
+    (function($) { //begin Scripted CSS Patch
+      function incdec(v, how) {return parseInt(v) + how + 'px';}
+      ddsmoothmenu.ie9shadow = function($elem) { //runs once
         var getter = document.defaultView.getComputedStyle($elem.get(0), null),
             curshadow = getter.getPropertyValue('box-shadow').split(' '),
             curmargin = {top: getter.getPropertyValue('margin-top'), left: getter.getPropertyValue('margin-left')};
@@ -737,55 +737,55 @@
                           '\tmargin-top: ' + incdec(curmargin.top, -1) + ';',
                           '\tmargin-left: ' + incdec(curmargin.left, -1) + ';', '}',
                           '</style>\n'].join('\n'));
-        ddsmoothmenu.ie9shadow = function(){}; //becomes empty function after running once
+        ddsmoothmenu.ie9shadow = function() {}; //becomes empty function after running once
       }; //end Scripted CSS Patch
       var jqheight = $.fn.height, jqwidth = $.fn.width; //begin jQuery Patch for IE 9+ .height() and .width()
       $.extend($.fn, {
-        height: function(){
+        height: function() {
           var obj = this.get(0);
-          if(this.length < 1 || arguments.length || obj === window || obj === document){
+          if (this.length < 1 || arguments.length || obj === window || obj === document) {
             return jqheight.apply(this, arguments);
           }
           return parseFloat(document.defaultView.getComputedStyle(obj, null).getPropertyValue('height'));
         },
-        innerHeight: function(){
-          if(this.length < 1){return null;}
+        innerHeight: function() {
+          if (this.length < 1) {return null;}
           var val = this.height(), obj = this.get(0), getter = document.defaultView.getComputedStyle(obj, null);
           val += parseInt(getter.getPropertyValue('padding-top'));
           val += parseInt(getter.getPropertyValue('padding-bottom'));
           return val;
         },
-        outerHeight: function(bool){
-          if(this.length < 1){return null;}
+        outerHeight: function(bool) {
+          if (this.length < 1) {return null;}
           var val = this.innerHeight(), obj = this.get(0), getter = document.defaultView.getComputedStyle(obj, null);
           val += parseInt(getter.getPropertyValue('border-top-width'));
           val += parseInt(getter.getPropertyValue('border-bottom-width'));
-          if(bool){
+          if (bool) {
             val += parseInt(getter.getPropertyValue('margin-top'));
             val += parseInt(getter.getPropertyValue('margin-bottom'));
           }
           return val;
         },
-        width: function(){
+        width: function() {
           var obj = this.get(0);
-          if(this.length < 1 || arguments.length || obj === window || obj === document){
+          if (this.length < 1 || arguments.length || obj === window || obj === document) {
             return jqwidth.apply(this, arguments);
           }
           return parseFloat(document.defaultView.getComputedStyle(obj, null).getPropertyValue('width'));
         },
-        innerWidth: function(){
-          if(this.length < 1){return null;}
+        innerWidth: function() {
+          if (this.length < 1) {return null;}
           var val = this.width(), obj = this.get(0), getter = document.defaultView.getComputedStyle(obj, null);
           val += parseInt(getter.getPropertyValue('padding-right'));
           val += parseInt(getter.getPropertyValue('padding-left'));
           return val;
         },
-        outerWidth: function(bool){
-          if(this.length < 1){return null;}
+        outerWidth: function(bool) {
+          if (this.length < 1) {return null;}
           var val = this.innerWidth(), obj = this.get(0), getter = document.defaultView.getComputedStyle(obj, null);
           val += parseInt(getter.getPropertyValue('border-right-width'));
           val += parseInt(getter.getPropertyValue('border-left-width'));
-          if(bool){
+          if (bool) {
             val += parseInt(getter.getPropertyValue('margin-right'));
             val += parseInt(getter.getPropertyValue('margin-left'));
           }
