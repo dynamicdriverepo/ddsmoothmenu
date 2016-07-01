@@ -59,6 +59,7 @@
     factory(window.jQuery);
   }
 })(function(jQuery) {
+  var $ = jQuery;
   var ddsmoothmenu = {
 
     ///////////////////////// Global Configuration Options: /////////////////////////
@@ -235,35 +236,36 @@
       var $mainul = $ul
       var $topulref = null
 
-      var flattened = flattenuls($mainul, false,
-                                 function(i, $header, $subul) { // loop through header LIs and sub ULs
-                                   $subul.addClass("submenu")
-                                   var $breadcrumb = $('<li class="breadcrumb" />')
-                                         .html('<img src="' + ddsmoothmenu.arrowimages.left[1] +'" class="' + ddsmoothmenu.arrowimages.left[0] +'" />' + $header.text())
-                                         .prependTo($subul)
-                                   $header.find('a:eq(0)').append('<img src="' + ddsmoothmenu.arrowimages.right[1] +'" class="' + ddsmoothmenu.arrowimages.right[0] +'" />')
-                                   $header.on('click', function(e) {
-                                     var $headermenu = $(this).parent('ul')
-                                     $headermenu = $headermenu.hasClass('submenu')? $headermenu : $headermenu.parent()
-                                     $headermenu.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: 0}).animate({left: '-100%'}, ddsmoothmenu.mobiletransition)
-                                     $subul.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: '100%'}).animate({left: 0}, ddsmoothmenu.mobiletransition)
-                                     e.stopPropagation()
-                                     e.preventDefault()
-                                   })
-                                   $breadcrumb.on('click', function(e) {
-                                     var $headermenu = $header.parent('ul')
-                                     $headermenu = $headermenu.hasClass('submenu')? $headermenu : $headermenu.parent()
-                                     $headermenu.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: '-100%'}).animate({left: 0}, ddsmoothmenu.mobiletransition)
-                                     $subul.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: 0}).animate({left: '100%'}, ddsmoothmenu.mobiletransition)
-                                     e.stopPropagation()
-                                     e.preventDefault()
-                                   })
-                                 },
-                                 function($topul) {
-                                   $topulref = $topul
-                                 }
-                                )
-
+      var flattened = flattenuls(
+        $mainul,
+        false,
+        function(i, $header, $subul) { // loop through header LIs and sub ULs
+          $subul.addClass("submenu")
+          var $breadcrumb = $('<li class="breadcrumb" />')
+                .html('<img src="' + ddsmoothmenu.arrowimages.left[1] +'" class="' + ddsmoothmenu.arrowimages.left[0] +'" />' + $header.text())
+                .prependTo($subul)
+          $header.find('a:eq(0)').append('<img src="' + ddsmoothmenu.arrowimages.right[1] +'" class="' + ddsmoothmenu.arrowimages.right[0] +'" />')
+          $header.on('click', function(e) {
+            var $headermenu = $(this).parent('ul')
+            $headermenu = $headermenu.hasClass('submenu')? $headermenu : $headermenu.parent()
+            $headermenu.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: 0}).animate({left: '-100%'}, ddsmoothmenu.mobiletransition)
+            $subul.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: '100%'}).animate({left: 0}, ddsmoothmenu.mobiletransition)
+            e.stopPropagation()
+            e.preventDefault()
+          })
+          $breadcrumb.on('click', function(e) {
+            var $headermenu = $header.parent('ul')
+            $headermenu = $headermenu.hasClass('submenu')? $headermenu : $headermenu.parent()
+            $headermenu.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: '-100%'}).animate({left: 0}, ddsmoothmenu.mobiletransition)
+            $subul.css({zIndex: ddsmoothmenu.mobilezindexvalue++, left: 0}).animate({left: '100%'}, ddsmoothmenu.mobiletransition)
+            e.stopPropagation()
+            e.preventDefault()
+          })
+        },
+        function($topul) {
+          $topulref = $topul
+        }
+      )
 
       if (!this.mobilecontainer.$main) { // if primary mobile menu container not defined yet
         var $maincontainer = $('<div class="ddsmoothmobile"><div class="topulsdiv"></div></div>').appendTo(document.body)
